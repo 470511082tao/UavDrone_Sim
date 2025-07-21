@@ -1,23 +1,32 @@
-# 无人机仿真编辑器 (UAV Drone Simulation Editor)
+# UavDrone_Sim - 第二代无人机接驳柜仿真系统
 
-基于Three.js和React的无人机仿真动画编辑器，用于创建无人机和接驳柜的动画模拟。
+基于Three.js和React的无人机仿真编辑器，支持多种项目类型的3D场景编辑和动画模拟。
 
 ## 功能特点
 
-- 3D场景编辑和预览
-- 无人机和接驳柜对象管理
-- 动画关键帧编辑
-- 动画时间线控制
-- 本地存储项目数据
+### 多项目类型支持
+- **低空经济项目**：无人机、接驳站、航点、建筑模型管理
+- **智能驿站项目**：货架、建筑模型管理  
+- **无人车项目**：待开发功能
+
+### 核心功能
+- 3D场景编辑和实时预览
+- 多种3D模型添加和交互
+- 模型连续添加模式（预览跟随鼠标）
+- 模型选择、移动、旋转、缩放
+- 模型删除（Delete/Backspace键）
+- 蓝色呼吸光圈选中效果
+- 项目数据本地持久化
+- 统一的UI布局和交互体验
 
 ## 技术栈
 
-- React
-- TypeScript
-- Three.js
-- React Three Fiber / Drei
-- Styled Components
-- Vite
+- **前端框架**：React 18 + TypeScript
+- **3D渲染**：Three.js + React Three Fiber + Drei
+- **构建工具**：Vite
+- **状态管理**：React Hooks + Context
+- **样式方案**：CSS Modules + Styled Components
+- **数据持久化**：LocalStorage
 
 ## 快速开始
 
@@ -41,36 +50,75 @@ npm run build
 
 ## 使用说明
 
-1. 首页可查看项目列表，点击"创建新项目"按钮创建项目。
-2. 进入编辑器页面后，可以在左侧添加无人机或接驳柜对象。
-3. 选中对象后，可以在右侧属性面板编辑对象的位置、旋转和缩放等属性。
-4. 在底部时间线面板上可以添加、编辑和删除关键帧。
-5. 使用顶部的播放控制器预览动画效果。
-6. 完成编辑后点击"保存"按钮保存项目。
+### 项目管理
+1. 在项目列表页面查看所有项目
+2. 点击"创建新项目"选择项目类型（低空经济/智能驿站/无人车）
+3. 为项目输入名称并确认创建
 
-## 项目结构
+### 3D场景编辑
+1. 进入编辑器后，在左侧工具栏选择要添加的模型类型
+2. 点击工具栏按钮进入连续添加模式，模型预览跟随鼠标
+3. 在场景中点击位置放置模型，可连续添加多个
+4. 按ESC键退出添加模式
+5. 点击模型进行选择，选中模型显示蓝色呼吸光圈
+6. 使用变换控制器（移动/旋转/缩放）调整模型
+7. 按Delete或Backspace键删除选中的模型
+
+### 项目保存
+- 所有更改自动保存到本地存储
+- 支持跨会话数据持久化
+
+## 3D模型库
+
+### 低空经济项目
+- **无人机模型**：四旋翼无人机，支持动画效果
+- **接驳站模型**：货物接驳平台
+- **航点模型**：飞行路径标记点
+- **建筑模型**：10m×10m房间结构
+
+### 智能驿站项目
+- **货架模型**：2m×0.5m×2m，4层浅蓝色铁质货架
+- **建筑模型**：10m×10m房间，带门窗结构
+
+## 项目架构
 
 ```
 src/
-├── components/       # 组件文件夹
-│   ├── Scene.tsx     # 3D场景组件
-│   ├── ObjectsPanel.tsx  # 对象面板组件
-│   ├── AnimationPanel.tsx # 动画面板组件
-│   ├── TimelinePanel.tsx  # 时间线面板组件
-│   ├── PropertiesPanel.tsx # 属性面板组件
-│   └── Toolbar.tsx   # 工具栏组件
-├── pages/            # 页面组件
-│   ├── ProjectList.tsx # 项目列表页
-│   └── Editor.tsx    # 编辑器页面
-├── styles/           # 样式文件
-│   ├── index.css     # 全局样式
-│   └── theme.ts      # 主题定义
-├── types/            # 类型定义
-│   └── index.ts      # 数据类型定义
-├── App.tsx           # 应用入口组件
-└── main.tsx          # 应用入口文件
+├── components/
+│   ├── common/              # 通用组件
+│   │   ├── BaseEditorLayout.tsx    # 编辑器布局基类
+│   │   ├── BaseToolbar.tsx         # 工具栏基类
+│   │   └── ModelPreview.tsx        # 模型预览组件
+│   ├── lowAltitudeEconomy/  # 低空经济项目组件
+│   └── smartStation/        # 智能驿站项目组件
+├── hooks/
+│   ├── useBaseEditor.ts     # 编辑器状态管理
+│   └── useSceneData.ts      # 场景数据管理
+├── models/                  # 3D模型组件
+│   ├── DroneModel.tsx
+│   ├── DockingStationModel.tsx
+│   ├── ShelfModel.tsx
+│   └── BuildingModel.tsx
+├── pages/                   # 页面组件
+│   ├── ProjectList.tsx      # 项目列表
+│   ├── LowAltitudeEconomyEditor.tsx
+│   └── SmartStationEditor.tsx
+├── types/                   # TypeScript类型定义
+└── styles/                  # 样式文件
 ```
+
+## 开发规范
+
+### 代码复用原则
+- 通用功能统一抽象到基类组件
+- 使用自定义Hooks管理共享状态逻辑
+- 避免不同项目类型重复实现相同功能
+
+### 组件设计原则
+- 基于组合模式构建复杂UI
+- 使用TypeScript确保类型安全
+- 遵循React最佳实践（Hooks、函数组件）
 
 ## 许可证
 
-MIT 
+MIT License
