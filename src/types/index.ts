@@ -1,8 +1,16 @@
+// 项目类型枚举
+export enum ProjectType {
+  LOW_ALTITUDE_ECONOMY = 'low-altitude-economy',
+  UNMANNED_VEHICLE = 'unmanned-vehicle',
+  SMART_STATION = 'smart-station'
+}
+
 // 项目类型定义
 export interface Project {
   id: string;
   name: string;
   description: string;
+  type: ProjectType; // 添加项目类型字段
   createdAt: string;
   updatedAt: string;
   thumbnail?: string;
